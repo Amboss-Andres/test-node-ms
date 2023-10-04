@@ -1,0 +1,23 @@
+minReplicas: 2
+maxReplicas: 4
+
+env:
+  SENTRY_ENVIRONMENT: 'production'
+
+# Uncomment the below only if you need external access to your service.
+# Be aware that "you" in that sentense is the whole internet, not you the reader.
+# Consider what this access means, is there authentication on your service, etc?
+#
+#ingress:
+#  enabled: true
+#  hosts:
+#    - BASE.de.production.amboss.com
+#  tls:
+#   - hosts:
+#       - BASE.de.production.amboss.com
+#     secretName: TODO: Add doc/link to doc for cert setup here
+
+labels:
+  env: production
+  region: eu-west-1
+  stage: production

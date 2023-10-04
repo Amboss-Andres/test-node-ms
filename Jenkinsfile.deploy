@@ -1,0 +1,13 @@
+// See: https://github.com/amboss-mededu/infrastructure-jenkins-library
+@Library('infra-jenkins-library') _
+
+deploymentMultiregionPipeline (
+    app_name: "BASIC_SERVICE",
+    chart: 'amboss/amboss-microservice',
+    release: "${params.release}",
+    environment: "${params.environment}",
+    regions: ["eu"],
+    namespace: "BASIC_SERVICE",
+    mainBranch: "master",
+    labels:['owner':'unknown']
+)

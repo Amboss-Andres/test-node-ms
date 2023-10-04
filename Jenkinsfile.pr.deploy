@@ -1,0 +1,33 @@
+@Library('infra-jenkins-library') _
+
+deploymentMultiregionPipeline(
+    app: 'BASIC_SERVICE',
+    release: "${params.release}",
+    chart: 'amboss/amboss-microservice',
+    environment: "${params.environment}",
+    namespace: "pr-BASIC_SERVICE-${params.release == 'latest' ? 'main' : params.release.substring(0, params.release.lastIndexOf('-'))}",
+    regions: ['eu'],
+    mainBranch: 'main',
+    timeout: '5m',
+    labels:['owner':'unknown'],
+    buildHelmCommand: { String releaseName, String namespace, String helmSubcommand, String region ->
+      String configEnv = ENVIRONMENT == 'pull-requests' ? 'qa' : ENVIRONMENT
+      String country = determineCountry(region)
+      String normalizedBranchName = normalizeStringForKubernetes(BRANCH_NAME, BRANCH_NAME.length())
+      releaseName = determineReleaseName(normalizedBranchName)
+      String normalizedHostName = normalizedBranchName
+      String normalizedNamespaceName = determineNamespace(namespace)
+      return "helm ${helmSubcommand} \
+              ${buildVariableConfig()} \
+              ${buildVariableConfig(configEnv)} \
+              ${buildVariableConfig(region, configEnv)} \
+              ${buildVariableConfig('pr')} \
+              --set 'image.tag=${RELEASE_VERSION}' \
+              --set ingress.hosts[0].host=${normalizedHostName}.BASE.${country}.qa.medicuja.de \
+              --set ingress.tls[0].hosts[0]=${normalizedHostName}.BASE.${country}.qa.medicuja.de \
+              --set ingress.tls[0].secretName=wild-BASE-${country}-qa-medicuja-de \
+              --kubeconfig /home/jenkins/.kube/${region}-${configEnv}.yaml \
+              --namespace ${normalizedNamespaceName} \
+              ${releaseName} amboss/amboss-microservice"
+    }
+)

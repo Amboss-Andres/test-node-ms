@@ -1,0 +1,20 @@
+env:
+  SENTRY_ENVIRONMENT: 'qa'
+
+# Uncomment the below only if you need external access to your service.
+# Be aware that "you" in that sentense is the whole internet, not you the reader.
+# Consider what this access means, is there authentication on your service, etc?
+#
+#ingress:
+#  enabled: true
+#  hosts:
+#    - BASE.de.qa.medicuja.de
+#  tls:
+#    - hosts:
+#      - BASE.de.qa.medicuja.de
+#      secretName: TODO: Add doc/link to doc for cert setup here
+
+labels:
+  env: qa
+  region: eu-west-1
+  stage: qa

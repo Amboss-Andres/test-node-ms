@@ -1,0 +1,32 @@
+# Default values.
+# Over-ride anything you need to in the ../values-*.yaml files
+minReplicas: 1
+maxReplicas: 2
+
+podAutoscaling:
+  cpu: 50
+  #mem: 50
+
+nameOverride: BASIC_SERVICE
+
+image:
+  repository: BASIC_SERVICE
+
+service:
+  type: ClusterIP
+  port: 4000 # public port on kubernetes service
+
+ingress:
+  enabled: false
+  path: /
+  # https://www.notion.so/amboss1/Application-URL-Guidelines-1cdba4122c3e4ff7bebc2e76fdc8b569
+  hosts: []
+  tls: []
+
+env:
+  SENTRY_DSN: ~ # "PUT_SENTRY_DSN_HERE"
+
+resources:
+  requests:
+    cpu: 0.1
+    memory: 128Mi
